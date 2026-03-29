@@ -21,6 +21,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     Age = st.number_input("Age (customer's age in years)", min_value=18, max_value=100, value=30)
+    TypeofContact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
     CityTier = st.selectbox("City Tier", [1, 2, 3])
     DurationOfPitch = st.number_input("Duration of Pitch (minutes)", min_value=0.0, value=15.0)
     Occupation = st.selectbox("Occupation", ["Salaried", "Small Business", "Large Business", "Free Lancer"])
@@ -28,10 +29,10 @@ with col1:
     NumberOfPersonVisiting = st.number_input("Number of Persons Visiting", min_value=1, value=2)
     NumberOfFollowups = st.number_input("Number of Followups", min_value=0, value=3)
     ProductPitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "Super Deluxe", "King"])
-    PreferredPropertyStar = st.selectbox("Preferred Property Star", [3, 4, 5])
-    MaritalStatus = st.selectbox("Marital Status", ["Single", "Married", "Divorced", "Unmarried"])
 
 with col2:
+    PreferredPropertyStar = st.selectbox("Preferred Property Star", [3, 4, 5])
+    MaritalStatus = st.selectbox("Marital Status", ["Single", "Married", "Divorced", "Unmarried"])
     NumberOfTrips = st.number_input("Number of Trips", min_value=0, value=2)
     Passport = st.selectbox("Has Passport?", [0, 1])
     PitchSatisfactionScore = st.selectbox("Pitch Satisfaction Score", [1, 2, 3, 4, 5])
@@ -39,18 +40,18 @@ with col2:
     NumberOfChildrenVisiting = st.number_input("Number of Children Visiting", min_value=0, value=1)
     Designation = st.selectbox("Designation", ["Executive", "Manager", "Senior Manager", "AVP", "VP"])
     MonthlyIncome = st.number_input("Monthly Income", min_value=0.0, value=25000.0)
-    TypeofContact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
 
 # Encode categorical inputs (must match training encoding)
-occupation_map = {"Salaried": 0, "Small Business": 1, "Large Business": 2, "Free Lancer": 3}
-gender_map = {"Male": 0, "Female": 1}
-product_map = {"Basic": 0, "Standard": 1, "Deluxe": 2, "Super Deluxe": 3, "King": 4}
-marital_map = {"Single": 0, "Married": 1, "Divorced": 2, "Unmarried": 3}
-designation_map = {"Executive": 0, "Manager": 1, "Senior Manager": 2, "AVP": 3, "VP": 4}
-contact_map = {"Self Enquiry": 0, "Company Invited": 1}
+typeofcontact_map = {"Company Invited": 0, "Self Enquiry": 1}
+occupation_map = {"Free Lancer": 0, "Large Business": 1, "Salaried": 2, "Small Business": 3}
+gender_map = {"Female": 0, "Male": 1}
+product_map = {"Basic": 0, "Standard": 1, "Deluxe": 3, "Super Deluxe": 4, "King": 2}
+marital_map = {"Single": 2, "Married": 1, "Divorced": 0, "Unmarried": 3}
+designation_map = {"Executive": 1, "Manager": 2, "Senior Manager": 3, "AVP": 0, "VP": 4}
 
 input_data = pd.DataFrame([{
     'Age': Age,
+    'TypeofContact': typeofcontact_map[TypeofContact],
     'CityTier': CityTier,
     'DurationOfPitch': DurationOfPitch,
     'Occupation': occupation_map[Occupation],
@@ -66,8 +67,7 @@ input_data = pd.DataFrame([{
     'OwnCar': OwnCar,
     'NumberOfChildrenVisiting': NumberOfChildrenVisiting,
     'Designation': designation_map[Designation],
-    'MonthlyIncome': MonthlyIncome,
-    'TypeofContact': contact_map[TypeofContact]
+    'MonthlyIncome': MonthlyIncome
 }])
 
 # Predict button
